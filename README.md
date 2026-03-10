@@ -15,15 +15,17 @@ cd ~/.mac-setup
 1. Installs Xcode CLI Tools + Homebrew
 2. Installs all apps via Brewfile (see list below)
 3. Downloads FortiClient VPN + builds Apple Container
-4. Configures Git with Ed25519 SSH key
+4. Configures Git with Ed25519 SSH key + commit signing, Zed as editor
 5. Applies ~60 macOS defaults (dark mode, Finder, Dock, input, Safari, etc.)
 6. Sets up minimal .zshrc with PATH exports
 
 ## Apps Installed via Brew
 
-**CLI:** git, gh, composer, bun, nvm, yarn, mas
+**CLI:** git, gh, composer, bun, nvm, yarn, mas, mackup
 
 **GUI:** Warp, Arc, Chrome, Zed, Setapp, GitHub Desktop, Spotify, Herd, Upscayl, Slack, BetterDisplay, ImageOptim, Ray, Tinkerwell, Microsoft Office, QLMarkdown, QuickLook JSON
+
+**Setapp:** Bartender, Paste, CleanShot, HazeOver, DevUtils, Requestly, AlDente Pro
 
 ## Running Individual Scripts
 
