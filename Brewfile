@@ -9,6 +9,7 @@ brew "bun"
 brew "nvm"
 brew "yarn"
 brew "mas"
+brew "mackup"
 
 # Casks (GUI apps)
 cask "warp"
