@@ -1,0 +1,5 @@
+# Development tools and package managers
+brew "composer"
+brew "bun"
+brew "nvm"
+brew "yarn"

@@ -1,0 +1,5 @@
+# Core CLI tools and utilities
+brew "git"
+brew "gh"
+brew "mas"
+brew "mackup"
