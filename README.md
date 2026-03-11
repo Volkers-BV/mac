@@ -17,7 +17,7 @@ Everything I need to set up a new Mac. One command, done.
 - Ed25519 SSH key generated and added to macOS Keychain
 - Scripts re-run only when their content changes (chezmoi hash detection)
 - ShellCheck, chezmoi verify, and Brewfile linting on every push
-- App settings backed up with Mackup + iCloud
+- Optional app settings sync with Mackup + iCloud
 
 ---
 
@@ -226,6 +226,7 @@ macOS defaults are split into separate scripts. Each re-runs when its content ch
 │   ├── Brewfile.office                   # microsoft-office
 │   └── Brewfile.quicklook               # qlmarkdown, quicklook-json
 ├── .chezmoiscripts/
+│   ├── run_onchange_00-preflight.sh.tmpl
 │   ├── run_once_01-generate-ssh-key.sh.tmpl
 │   ├── run_once_02-configure-nvm.sh
 │   ├── run_onchange_10-install-packages.sh.tmpl
@@ -262,6 +263,7 @@ bin/setup.sh
   └─ chezmoi init --apply
        │
        ├─ Prompt for name, email, hostname, locale
+       ├─ run_onchange_00 → Preflight: cache sudo, check Full Disk Access
        ├─ run_once_01  → Generate Ed25519 SSH key, add to Keychain, copy pub to clipboard
        ├─ run_once_02  → Create ~/.nvm directory
        ├─ run_onchange_10 → brew update && brew bundle (core → dev → apps → office → quicklook)
@@ -290,13 +292,27 @@ If you changed a Brewfile or macOS defaults script, chezmoi detects the content 
 
 ---
 
-## App settings sync
+## App settings sync (optional)
 
-Warp, Zed, and other app configs are synced via [Mackup](https://github.com/lra/mackup) and iCloud. After setup:
+[Mackup](https://github.com/lra/mackup) can back up and restore app settings (preferences, configs) via iCloud. It works by symlinking app config files to iCloud Drive so they stay in sync across machines.
+
+**Option A: Don't use Mackup** — skip it entirely. Your apps start with fresh defaults and you configure them manually. This is the simplest approach.
+
+**Option B: Start using Mackup** — on a machine that's already configured the way you like:
 
 ```bash
-mackup restore
+mackup backup       # copies app configs to iCloud and replaces them with symlinks
 ```
+
+Then on a fresh machine after running the setup script:
+
+```bash
+mackup restore      # pulls configs from iCloud and symlinks them into place
+```
+
+Mackup supports [hundreds of apps](https://github.com/lra/mackup#supported-applications) out of the box. You can also define custom apps in `~/.mackup/` configs.
+
+> **Note:** Mackup is installed via Homebrew as part of the core Brewfile but is completely optional — nothing breaks if you never run it.
 
 ---
 

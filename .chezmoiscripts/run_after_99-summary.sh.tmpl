@@ -68,7 +68,7 @@ echo "  Reminders:"
 if [ -f "$SSH_KEY" ]; then
   echo "    - Add SSH key to GitHub if not done: https://github.com/settings/ssh/new"
 fi
-echo "    - Run 'mackup restore' to restore app settings from iCloud"
+echo "    - Optional: run 'mackup restore' to restore app settings from iCloud (only if you've previously run 'mackup backup')"
 echo "    - Sign in to apps (Spotify, Slack, Arc, Chrome, etc.)"
 if ! ls "$HOME/Library/Containers/com.apple.Safari/Data/Library/Preferences/" &>/dev/null; then
   echo "    - Grant Full Disk Access to your terminal, then re-run to apply Safari defaults"
