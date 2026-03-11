@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# helpers/macos-defaults.sh hash: {{ include "helpers/macos-defaults.sh" | sha256sum }}
+
+# shellcheck source=helpers/macos-defaults.sh
+source "{{ .chezmoi.sourceDir }}/helpers/macos-defaults.sh"
+
+echo "==> Applying screenshot defaults..."
+
+close_system_settings
+
+# Create screenshots directory
+mkdir -p "${HOME}/Documents/Screenshots"
+
+# Save location
+set_default com.apple.screencapture location string "${HOME}/Documents/Screenshots"
+
+# Format: PNG
+set_default com.apple.screencapture type string "png"
+
+# Disable window shadow
+set_default com.apple.screencapture disable-shadow bool true
+
+restart_app "SystemUIServer"
+
+echo "==> Screenshot defaults applied."

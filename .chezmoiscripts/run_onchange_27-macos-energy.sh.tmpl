@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# helpers/macos-defaults.sh hash: {{ include "helpers/macos-defaults.sh" | sha256sum }}
+
+# shellcheck source=helpers/macos-defaults.sh
+source "{{ .chezmoi.sourceDir }}/helpers/macos-defaults.sh"
+
+echo "==> Applying energy defaults..."
+
+require_sudo
+
+# Battery: display sleep after 15 minutes
+sudo pmset -b displaysleep 15
+
+# Power adapter: display sleep never
+sudo pmset -c displaysleep 0
+
+# Prevent sleep on power adapter
+sudo pmset -c sleep 0
+
+echo "==> Energy defaults applied."
