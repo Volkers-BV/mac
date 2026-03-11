@@ -2,9 +2,13 @@
 {{- $email := promptStringOnce . "email" "Email address" -}}
 {{- $hostname := promptStringOnce . "hostname" "Computer hostname" -}}
 {{- $locale := promptStringOnce . "locale" "Locale" "en_US@currency=EUR" -}}
+{{- $editor := promptStringOnce . "editor" "Git editor command" "zed --wait" -}}
+{{- $languages := promptStringOnce . "languages" "Languages (comma-separated, e.g. en,nl)" "en" -}}
 
 [data]
   name = {{ $name | quote }}
   email = {{ $email | quote }}
   hostname = {{ $hostname | quote }}
   locale = {{ $locale | quote }}
+  editor = {{ $editor | quote }}
+  languages = {{ $languages | quote }}
