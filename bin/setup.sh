@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# --- Configuration ---
+# After forking, update this to point to your fork.
+GITHUB_REPO="${GITHUB_REPO:-Volkers-BV/mac}"
+
 echo ""
 echo "============================================"
 echo "  Dotfiles Bootstrap"
@@ -83,5 +87,5 @@ SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 if [ -f "$SCRIPT_DIR/.chezmoi.toml.tmpl" ]; then
   chezmoi init --apply --source="$SCRIPT_DIR"
 else
-  chezmoi init --apply fridzema/dotfiles-setup
+  chezmoi init --apply "$GITHUB_REPO"
 fi
