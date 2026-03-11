@@ -1,125 +1,107 @@
-# Dotfiles
+# Mac Setup
 
-Everything I need to set up a new Mac. One command, done.
+Opinionated Mac development environment setup, managed with [chezmoi](https://chezmoi.io).
 
-[![CI](https://github.com/fridzema/dotfiles-setup/actions/workflows/ci.yml/badge.svg)](https://github.com/fridzema/dotfiles-setup/actions/workflows/ci.yml)
+Fork this repo and make it yours.
+
 ![macOS](https://img.shields.io/badge/macOS-14%2B-blue)
 ![chezmoi](https://img.shields.io/badge/managed%20with-chezmoi-blue)
 
 ---
 
-## Features
+## What's included
 
-- Curl a script on a fresh Mac and walk away
-- Works on both Apple Silicon and Intel
-- Brewfiles split by category (core, dev, apps, office, quicklook)
-- 100+ macOS defaults applied via `defaults write` scripts
-- Ed25519 SSH key generated and added to macOS Keychain
-- Scripts re-run only when their content changes (chezmoi hash detection)
-- ShellCheck, chezmoi verify, and Brewfile linting on every push
-- Optional app settings sync with Mackup + iCloud
+- Homebrew packages (CLI tools, dev tools, GUI apps, office, QuickLook plugins)
+- Dotfiles: `.gitconfig`, `.zshrc`, `.ssh/config`, `.gitignore_global`
+- macOS system defaults (dark mode, Dock, Finder, keyboard, Safari, and more)
+- Ed25519 SSH key generation with macOS Keychain integration
+- Optional app settings sync via Mackup + iCloud
 
 ---
 
-## Quick start
+## Getting started
 
-On a fresh machine:
+### 1. Fork this repo
+
+Click **"Use this template"** or **Fork** on GitHub to create your own copy.
+
+### 2. Customize
+
+Before running, review and edit these files in your fork:
+
+| What | File | Look for |
+|------|------|----------|
+| Setup script repo URL | `bin/setup.sh` | `GITHUB_REPO` variable at top |
+| Brew apps | `brewfiles/Brewfile.apps` | Sections: company, dev, personal |
+| App install checklist | `.chezmoiscripts/run_after_99-summary.sh.tmpl` | Uncomment apps you use |
+| macOS defaults | `.chezmoiscripts/run_onchange_20-25*` | Edit any preferences |
+
+On first run, chezmoi will prompt you for: name, email, hostname, locale, editor, and languages.
+
+### 3. Run on a fresh Mac
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/fridzema/dotfiles-setup/main/bin/setup.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/<your-user>/mac/main/bin/setup.sh)"
 ```
 
-Or clone and run manually:
+Or clone and run locally:
 
 ```bash
-git clone https://github.com/fridzema/dotfiles-setup.git
-cd dotfiles-setup
+git clone https://github.com/<your-user>/mac.git
+cd mac
 ./bin/setup.sh
 ```
 
-This installs Xcode CLI Tools, Homebrew, and chezmoi. Then `chezmoi init --apply` takes over:
+This installs Xcode CLI Tools, Homebrew, and chezmoi, then runs `chezmoi init --apply` which:
 
-1. Asks for your name, email, hostname, and locale
+1. Prompts for your name, email, hostname, locale, editor, and languages
 2. Generates an SSH key and adds it to the macOS Keychain
-3. Deploys dotfiles (~/.gitconfig, ~/.zshrc, ~/.ssh/config)
-4. Installs Homebrew packages from categorized Brewfiles
+3. Deploys dotfiles
+4. Installs Homebrew packages
 5. Applies macOS system defaults
-6. Prints a summary of what's done and what still needs manual action
+6. Prints a summary with next steps
 
 ---
 
-## What gets installed
+## Updating
 
-<details>
-<summary>CLI tools</summary>
+After editing any file in your fork:
 
-| Package | Description |
-|---------|-------------|
-| git | Version control |
-| gh | GitHub CLI |
-| mas | Mac App Store CLI |
-| mackup | App settings sync via iCloud |
+```bash
+chezmoi update    # git pull + apply in one step
+```
 
-</details>
+Or apply without pulling:
 
-<details>
-<summary>Development</summary>
+```bash
+chezmoi apply
+```
 
-| Package | Description |
-|---------|-------------|
-| composer | PHP package manager |
-| bun | JavaScript runtime and bundler |
-| nvm | Node.js version manager |
-| yarn | JavaScript package manager |
+Scripts prefixed with `run_onchange_` only re-run when their content changes.
 
-</details>
+---
 
-<details>
-<summary>Applications (Homebrew Cask)</summary>
+## App settings sync (optional)
 
-| App | Description |
-|-----|-------------|
-| Warp | GPU-accelerated terminal |
-| Arc | Web browser |
-| Google Chrome | Web browser |
-| Zed | Code editor |
-| GitHub Desktop | Git GUI |
-| Slack | Team communication |
-| Spotify | Music streaming |
-| Setapp | App subscription service |
-| Herd | PHP runtime manager |
-| Ray | Debug tool |
-| Tinkerwell | Laravel REPL |
-| Upscayl | AI image upscaler |
-| BetterDisplay | Display management |
-| ImageOptim | Image optimization |
+[Mackup](https://github.com/lra/mackup) can back up and restore app settings via iCloud.
 
-</details>
+**Start using it** — on a machine that's already configured:
 
-<details>
-<summary>Office</summary>
+```bash
+mackup backup       # copies app configs to iCloud, replaces with symlinks
+```
 
-| Package | Description |
-|---------|-------------|
-| Microsoft Office | Word, Excel, PowerPoint, Outlook |
+On a fresh machine after setup:
 
-</details>
+```bash
+mackup restore      # pulls configs from iCloud, symlinks into place
+```
 
-<details>
-<summary>QuickLook plugins</summary>
-
-| Plugin | Description |
-|--------|-------------|
-| qlmarkdown | Markdown preview |
-| quicklook-json | JSON preview |
-
-</details>
+Mackup is installed via Homebrew but completely optional.
 
 ---
 
 ## What gets configured
-
-macOS defaults are split into separate scripts. Each re-runs when its content changes.
 
 <details>
 <summary>System (hostname, appearance, locale, security)</summary>
@@ -131,7 +113,8 @@ macOS defaults are split into separate scripts. Each re-runs when its content ch
 - Expands save and print panels by default
 - Saves to disk (not iCloud) by default
 - Sets metric units (Centimeters) and Celsius
-- Configures locale, languages (English + Dutch), and clock format
+- Configures locale, languages, and clock format
+- Disables natural scrolling
 - Requires password immediately after sleep/screen saver
 
 </details>
@@ -202,17 +185,6 @@ macOS defaults are split into separate scripts. Each re-runs when its content ch
 
 ---
 
-## Dotfiles
-
-| File | Deployed to | Description |
-|------|-------------|-------------|
-| `dot_gitconfig.tmpl` | `~/.gitconfig` | Git user, SSH commit signing, Zed as editor/diff/merge tool, rebase-on-pull, auto-prune |
-| `dot_zshrc` | `~/.zshrc` | Homebrew PATH (arm64/x86), Composer, Bun, NVM, Yarn |
-| `dot_gitignore_global` | `~/.gitignore_global` | Ignores .DS_Store, .idea/, .vscode/, swap files |
-| `private_dot_ssh/config.tmpl` | `~/.ssh/config` | GitHub SSH with Keychain agent forwarding |
-
----
-
 ## Project structure
 
 ```
@@ -239,7 +211,7 @@ macOS defaults are split into separate scripts. Each re-runs when its content ch
 │   └── run_after_99-summary.sh.tmpl
 ├── helpers/
 │   └── macos-defaults.sh                 # Shared library: set_default, require_sudo, restart_app
-├── .chezmoi.toml.tmpl                    # Prompts for name, email, hostname, locale
+├── .chezmoi.toml.tmpl                    # Prompts for name, email, hostname, locale, editor, languages
 ├── dot_gitconfig.tmpl
 ├── dot_zshrc
 ├── dot_gitignore_global
@@ -262,7 +234,7 @@ bin/setup.sh
   ├─ Install chezmoi
   └─ chezmoi init --apply
        │
-       ├─ Prompt for name, email, hostname, locale
+       ├─ Prompt for name, email, hostname, locale, editor, languages
        ├─ run_onchange_00 → Preflight: cache sudo, check Full Disk Access
        ├─ run_once_01  → Generate Ed25519 SSH key, add to Keychain, copy pub to clipboard
        ├─ run_once_02  → Create ~/.nvm directory
@@ -271,59 +243,6 @@ bin/setup.sh
        ├─ Deploy templates → ~/.gitconfig, ~/.zshrc, ~/.ssh/config, ~/.gitignore_global
        └─ run_after_99 → Print summary (installed count, missing apps, next steps)
 ```
-
----
-
-## Updating
-
-After editing any file in this repo:
-
-```bash
-chezmoi apply
-```
-
-Or pull and apply in one step:
-
-```bash
-chezmoi update
-```
-
-If you changed a Brewfile or macOS defaults script, chezmoi detects the content change and re-runs it automatically (`run_onchange_` prefix).
-
----
-
-## App settings sync (optional)
-
-[Mackup](https://github.com/lra/mackup) can back up and restore app settings (preferences, configs) via iCloud. It works by symlinking app config files to iCloud Drive so they stay in sync across machines.
-
-**Option A: Don't use Mackup** — skip it entirely. Your apps start with fresh defaults and you configure them manually. This is the simplest approach.
-
-**Option B: Start using Mackup** — on a machine that's already configured the way you like:
-
-```bash
-mackup backup       # copies app configs to iCloud and replaces them with symlinks
-```
-
-Then on a fresh machine after running the setup script:
-
-```bash
-mackup restore      # pulls configs from iCloud and symlinks them into place
-```
-
-Mackup supports [hundreds of apps](https://github.com/lra/mackup#supported-applications) out of the box. You can also define custom apps in `~/.mackup/` configs.
-
-> **Note:** Mackup is installed via Homebrew as part of the core Brewfile but is completely optional — nothing breaks if you never run it.
-
----
-
-## Manual steps
-
-The summary script tells you what's left:
-
-- Add your SSH public key to [github.com/settings/keys](https://github.com/settings/keys) (it's already in your clipboard)
-- Install Setapp apps: Bartender, Paste, CleanShot, HazeOver, DevUtils, Requestly, AlDente Pro
-- Download FortiClient VPN from [fortinet.com](https://www.fortinet.com/support/product-downloads#vpn)
-- Restart -- some macOS defaults only take effect after a reboot
 
 ---
 
@@ -336,6 +255,17 @@ Every push and PR runs three checks on macOS 14:
 | shellcheck | Lints all shell scripts (pure and templated) |
 | chezmoi-verify | Dry-run `chezmoi apply` with test data to validate templates |
 | brewfile-lint | Runs `brew bundle list` on each Brewfile to verify package references |
+
+---
+
+## Manual steps
+
+The summary script tells you what's left after setup:
+
+- Add your SSH public key to [github.com/settings/keys](https://github.com/settings/keys) (it's already in your clipboard)
+- Install FortiClient VPN from [fortinet.com](https://www.fortinet.com/support/product-downloads#vpn)
+- Optionally install recommended Setapp apps
+- Restart — some macOS defaults only take effect after a reboot
 
 ---
 
