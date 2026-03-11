@@ -1,0 +1,5 @@
+[data]
+  name = "Test User"
+  email = "test@example.com"
+  hostname = "Test-Mac"
+  locale = "en_US"

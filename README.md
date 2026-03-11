@@ -1,44 +1,82 @@
-# Mac Setup
+# Dotfiles
 
-Fresh Mac setup scripts for Apple Silicon running macOS Tahoe 26.2.
+Personal dotfiles managed with [chezmoi](https://www.chezmoi.io/), targeting macOS (Apple Silicon and Intel).
 
 ## Quick Start
 
-```bash
-git clone https://github.com/fridzema/mac-setup.git ~/.mac-setup
-cd ~/.mac-setup
-./setup.sh
-```
-
-## What It Does
-
-1. Installs Xcode CLI Tools + Homebrew
-2. Installs all apps via Brewfile (see list below)
-3. Downloads FortiClient VPN + builds Apple Container
-4. Configures Git with Ed25519 SSH key + commit signing, Zed as editor
-5. Applies ~60 macOS defaults (dark mode, Finder, Dock, input, Safari, etc.)
-6. Sets up minimal .zshrc with PATH exports
-
-## Apps Installed via Brew
-
-**CLI:** git, gh, composer, bun, nvm, yarn, mas, mackup
-
-**GUI:** Warp, Arc, Chrome, Zed, Setapp, GitHub Desktop, Spotify, Herd, Upscayl, Slack, BetterDisplay, ImageOptim, Ray, Tinkerwell, Microsoft Office, QLMarkdown, QuickLook JSON
-
-**Setapp:** Bartender, Paste, CleanShot, HazeOver, DevUtils, Requestly, AlDente Pro
-
-## Running Individual Scripts
-
-Each script can be run independently:
+On a fresh machine:
 
 ```bash
-./scripts/install-brew.sh       # Homebrew + Brewfile
-./scripts/install-manual.sh     # FortiClient + Apple Container
-./scripts/configure-git.sh      # Git config + SSH key
-./scripts/configure-macos.sh    # macOS defaults
-./scripts/configure-shell.sh    # .zshrc setup
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/fridzema/dotfiles-setup/main/bin/setup.sh)"
 ```
 
-## Re-running
+Or clone and run manually:
 
-The setup tracks completed steps in `.setup-completed-steps`. Delete a line to re-run that step, or delete the file to run everything again.
+```bash
+git clone https://github.com/fridzema/dotfiles-setup.git
+cd dotfiles-setup
+./bin/setup.sh
+```
+
+The bootstrap script installs Xcode CLI Tools, Homebrew, and chezmoi, then runs `chezmoi init --apply` which:
+
+1. Prompts for your name, email, hostname, and locale
+2. Deploys dotfiles (~/.gitconfig, ~/.zshrc, ~/.ssh/config)
+3. Generates an SSH key and adds it to the macOS Keychain
+4. Installs Homebrew packages from categorized Brewfiles
+5. Applies macOS system defaults
+6. Prints a summary of what's installed and what still needs manual action
+
+## Updating
+
+After editing any file in this repo:
+
+```bash
+chezmoi apply
+```
+
+Or pull and apply in one step:
+
+```bash
+chezmoi update
+```
+
+## Structure
+
+| Path | Purpose |
+|---|---|
+| `.chezmoi.toml.tmpl` | Machine-specific config (name, email, hostname, locale) |
+| `dot_gitconfig.tmpl` | Git configuration template |
+| `dot_zshrc` | Shell configuration |
+| `private_dot_ssh/` | SSH config (deployed with 0700 permissions) |
+| `brewfiles/` | Split Brewfiles by category (core, dev, apps, office, quicklook) |
+| `.chezmoiscripts/` | Lifecycle scripts (SSH key gen, package install, macOS defaults) |
+| `helpers/` | Shared shell library for macOS defaults scripts |
+| `bin/setup.sh` | Bootstrap script for fresh machines |
+
+## macOS Defaults
+
+System preferences are split into categorized scripts that re-run when their content changes:
+
+- **system** — hostname, locale, dark mode, UI/UX, screen lock
+- **dock** — icon size, layout, Mission Control
+- **finder** — hidden files, extensions, list view, ~/Library
+- **input** — keyboard repeat, disable autocorrect/smart quotes
+- **safari** — privacy, developer tools, home page
+- **apps** — App Store updates, TextEdit, Activity Monitor, Photos, Terminal
+
+## App Settings
+
+App-specific settings (Warp, Zed, etc.) are managed by [mackup](https://github.com/lra/mackup) via iCloud sync. After setup, run:
+
+```bash
+mackup restore
+```
+
+## Manual Steps
+
+The post-apply summary reports which apps still need manual installation:
+
+- **FortiClient VPN** — download from [fortinet.com](https://www.fortinet.com/support/product-downloads#vpn)
+- **Setapp apps** — Bartender, Paste, CleanShot, HazeOver, DevUtils, Requestly, AlDente Pro
+- **GitHub SSH key** — public key is copied to clipboard during setup

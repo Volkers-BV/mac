@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo ""
+echo "============================================"
+echo "  chezmoi apply complete"
+echo "============================================"
+echo ""
+
+# --- Brew stats ---
+if command -v brew &>/dev/null; then
+  echo "  Homebrew: $(brew list --formula 2>/dev/null | wc -l | tr -d ' ') formulae, $(brew list --cask 2>/dev/null | wc -l | tr -d ' ') casks"
+fi
+
+# --- Git ---
+if command -v git &>/dev/null; then
+  GIT_NAME="$(git config --global user.name 2>/dev/null || echo 'not set')"
+  GIT_EMAIL="$(git config --global user.email 2>/dev/null || echo 'not set')"
+  echo "  Git:      $GIT_NAME <$GIT_EMAIL>"
+fi
+
+# --- SSH key ---
+SSH_KEY="{{ .chezmoi.homeDir }}/.ssh/id_ed25519"
+if [ -f "$SSH_KEY" ]; then
+  echo "  SSH key:  $SSH_KEY"
+else
+  echo "  SSH key:  NOT FOUND — run 'chezmoi apply' or generate manually"
+fi
+
+# --- Verification: manual installs ---
+echo ""
+MISSING=()
+
+check_app() {
+  local name="$1" path="$2"
+  if [ ! -d "$path" ]; then
+    MISSING+=("$name")
+  fi
+}
+
+# --- Manual-install app inventory ---
+# Update this list when apps are added, removed, or renamed.
+
+# Setapp apps
+check_app "Bartender" "/Applications/Bartender 4.app"
+check_app "Paste" "/Applications/Paste.app"
+check_app "CleanShot X" "/Applications/CleanShot X.app"
+check_app "HazeOver" "/Applications/HazeOver.app"
+check_app "DevUtils" "/Applications/DevUtils.app"
+check_app "Requestly" "/Applications/Requestly.app"
+check_app "AlDente Pro" "/Applications/AlDente Pro.app"
+
+# External downloads
+check_app "FortiClient VPN" "/Applications/FortiClient.app"
+
+if [ ${#MISSING[@]} -gt 0 ]; then
+  echo "  Apps not yet installed:"
+  for app in "${MISSING[@]}"; do
+    echo "    - $app"
+  done
+else
+  echo "  All expected apps are installed."
+fi
+
+# --- Reminders ---
+echo ""
+echo "  Reminders:"
+if [ -f "$SSH_KEY" ]; then
+  echo "    - Add SSH key to GitHub if not done: https://github.com/settings/ssh/new"
+fi
+echo "    - Run 'mackup restore' to restore app settings from iCloud"
+echo "    - Sign in to apps (Spotify, Slack, Arc, Chrome, etc.)"
+echo "    - Restart Mac to apply all system settings"
+echo ""

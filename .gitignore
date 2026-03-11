@@ -1,2 +1,7 @@
-.setup-completed-steps
 .DS_Store
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+.worktrees/

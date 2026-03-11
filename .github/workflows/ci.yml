@@ -7,13 +7,39 @@ on:
   workflow_dispatch:
 
 jobs:
-  check:
+  shellcheck:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
       - name: Install shellcheck
         run: brew install shellcheck
-      - name: Run shellcheck
-        run: shellcheck setup.sh scripts/*.sh
-      - name: Validate Brewfile
-        run: brew bundle check --file=Brewfile --verbose
+      - name: Lint pure shell scripts
+        run: |
+          shellcheck bin/setup.sh helpers/macos-defaults.sh .chezmoiscripts/run_once_02-configure-nvm.sh
+          shellcheck --exclude=SC1091 dot_zshrc
+      - name: Lint templated shell scripts
+        run: |
+          for f in $(find .chezmoiscripts -name '*.sh.tmpl'); do
+            echo "Checking $f..."
+            sed 's/{{[^}]*}}/TMPL/g' "$f" | shellcheck --exclude=SC1091 - || exit 1
+          done
+
+  chezmoi-verify:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install chezmoi
+        run: brew install chezmoi
+      - name: Verify chezmoi source state
+        run: chezmoi apply --source="$(pwd)" --config=.github/test-chezmoi-data.toml --no-tty --dry-run --verbose
+
+  brewfile-lint:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Brewfiles
+        run: |
+          for f in brewfiles/Brewfile.*; do
+            echo "Checking $f..."
+            brew bundle list --file="$f" > /dev/null
+          done
