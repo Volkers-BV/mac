@@ -4,6 +4,7 @@ set -euo pipefail
 # Brewfile content hashes (chezmoi change detection):
 # core:      {{ include "brewfiles/Brewfile.core" | sha256sum }}
 # dev:       {{ include "brewfiles/Brewfile.dev" | sha256sum }}
+# docker:    {{ include "brewfiles/Brewfile.docker" | sha256sum }}
 # apps:      {{ include "brewfiles/Brewfile.apps" | sha256sum }}
 # office:    {{ include "brewfiles/Brewfile.office" | sha256sum }}
 # quicklook: {{ include "brewfiles/Brewfile.quicklook" | sha256sum }}
@@ -17,6 +18,7 @@ brew update
 BREWFILES=(
   "$SOURCE_DIR/brewfiles/Brewfile.core"
   "$SOURCE_DIR/brewfiles/Brewfile.dev"
+  "$SOURCE_DIR/brewfiles/Brewfile.docker"
   "$SOURCE_DIR/brewfiles/Brewfile.apps"
   "$SOURCE_DIR/brewfiles/Brewfile.office"
   "$SOURCE_DIR/brewfiles/Brewfile.quicklook"

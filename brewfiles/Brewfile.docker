@@ -1,0 +1,5 @@
+# Docker runtime (Colima) and CLI tools
+brew "colima"
+brew "docker"
+brew "docker-compose"
+brew "docker-credential-helper"
