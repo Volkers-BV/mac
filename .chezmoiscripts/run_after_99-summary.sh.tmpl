@@ -41,17 +41,20 @@ check_app() {
 # --- Manual-install app inventory ---
 # Update this list when apps are added, removed, or renamed.
 
-# Setapp apps
-check_app "Bartender" "/Applications/Bartender 4.app"
-check_app "Paste" "/Applications/Paste.app"
-check_app "CleanShot X" "/Applications/CleanShot X.app"
-check_app "HazeOver" "/Applications/HazeOver.app"
-check_app "DevUtils" "/Applications/DevUtils.app"
-check_app "Requestly" "/Applications/Requestly.app"
-check_app "AlDente Pro" "/Applications/AlDente Pro.app"
-
-# External downloads
+# Company-required
 check_app "FortiClient VPN" "/Applications/FortiClient.app"
+
+# Recommended (via Setapp) — uncomment any you use:
+# check_app "Bartender" "/Applications/Bartender 4.app"
+# check_app "Paste" "/Applications/Paste.app"
+# check_app "CleanShot X" "/Applications/CleanShot X.app"
+# check_app "HazeOver" "/Applications/HazeOver.app"
+# check_app "DevUtils" "/Applications/DevUtils.app"
+# check_app "Requestly" "/Applications/Requestly.app"
+# check_app "AlDente Pro" "/Applications/AlDente Pro.app"
+
+# Add your own checks below:
+
 
 if [ ${#MISSING[@]} -gt 0 ]; then
   echo "  Apps not yet installed:"
