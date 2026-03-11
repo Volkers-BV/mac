@@ -41,4 +41,30 @@ set_global_default AppleKeyboardUIMode int 3
 # Better Bluetooth audio quality
 set_default com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" int 40
 
+# --- Trackpad ---
+
+# Maximum tracking speed (0.0–3.0)
+set_global_default com.apple.trackpad.scaling float 3
+
+# Tap to click (soft click)
+set_default com.apple.AppleMultitouchTrackpad Clicking bool true
+set_default com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking bool true
+
+# Light click pressure (0=light, 1=medium, 2=firm)
+set_default com.apple.AppleMultitouchTrackpad FirstClickThreshold int 0
+set_default com.apple.AppleMultitouchTrackpad SecondClickThreshold int 0
+
+# Two-finger secondary click
+set_default com.apple.AppleMultitouchTrackpad TrackpadRightClick bool true
+set_default com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick bool true
+
+# Momentum scrolling
+set_default com.apple.AppleMultitouchTrackpad TrackpadMomentumScroll bool true
+
+# Gestures: pinch to zoom, rotate, swipes
+set_default com.apple.AppleMultitouchTrackpad TrackpadPinch bool true
+set_default com.apple.AppleMultitouchTrackpad TrackpadRotate bool true
+set_default com.apple.AppleMultitouchTrackpad TrackpadTwoFingerDoubleTapGesture bool true
+set_default com.apple.AppleMultitouchTrackpad TrackpadTwoFingerFromRightEdgeSwipeGesture int 3
+
 echo "==> Input defaults applied."
