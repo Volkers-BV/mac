@@ -27,6 +27,17 @@ fi
 # Accept license (may already be accepted)
 sudo xcodebuild -license accept 2>/dev/null || true
 
+# --- 1b. Sanitize gitconfig ---
+# A previous chezmoi run may have written a .gitconfig with an unquoted
+# semicolon commentchar (`;` is an inline comment in git config syntax).
+# This breaks `git init` and thus Homebrew's installer.
+if [ -f "$HOME/.gitconfig" ] && grep -q 'commentchar = ;' "$HOME/.gitconfig" 2>/dev/null; then
+  if ! grep -q 'commentchar = ";"' "$HOME/.gitconfig" 2>/dev/null; then
+    echo "==> Fixing unquoted commentchar in ~/.gitconfig..."
+    sed -i '' 's/commentchar = ;$/commentchar = ";"/' "$HOME/.gitconfig"
+  fi
+fi
+
 # --- 2. Homebrew ---
 if ! command -v brew &>/dev/null; then
   echo "==> Installing Homebrew..."
