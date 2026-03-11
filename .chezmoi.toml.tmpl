@@ -1,7 +1,7 @@
-{{- $name := promptStringOnce . "data.name" "Full name" -}}
-{{- $email := promptStringOnce . "data.email" "Email address" -}}
-{{- $hostname := promptStringOnce . "data.hostname" "Computer hostname" -}}
-{{- $locale := promptStringOnce . "data.locale" "Locale" "en_US@currency=EUR" -}}
+{{- $name := promptStringOnce . "name" "Full name" -}}
+{{- $email := promptStringOnce . "email" "Email address" -}}
+{{- $hostname := promptStringOnce . "hostname" "Computer hostname" -}}
+{{- $locale := promptStringOnce . "locale" "Locale" "en_US@currency=EUR" -}}
 
 [data]
   name = {{ $name | quote }}

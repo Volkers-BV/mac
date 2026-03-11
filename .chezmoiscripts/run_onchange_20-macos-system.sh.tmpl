@@ -12,10 +12,10 @@ close_system_settings
 require_sudo
 
 # Set computer name
-sudo scutil --set ComputerName "{{ .data.hostname }}"
-sudo scutil --set HostName "{{ .data.hostname }}"
-sudo scutil --set LocalHostName "{{ .data.hostname }}"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "{{ .data.hostname }}"
+sudo scutil --set ComputerName "{{ .hostname }}"
+sudo scutil --set HostName "{{ .hostname }}"
+sudo scutil --set LocalHostName "{{ .hostname }}"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "{{ .hostname }}"
 
 # Disable the sound effects on boot
 sudo nvram StartupMute=%01
@@ -64,7 +64,7 @@ set_default com.apple.menuextra.clock DateFormat string "EEE MMM d h:mm a"
 
 # Language and locale
 defaults write NSGlobalDomain AppleLanguages -array "en" "nl"
-defaults write NSGlobalDomain AppleLocale -string "{{ .data.locale }}"
+defaults write NSGlobalDomain AppleLocale -string "{{ .locale }}"
 
 # Screen: require password immediately after sleep
 set_default com.apple.screensaver askForPassword int 1
