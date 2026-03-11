@@ -4,7 +4,7 @@
 	signingkey = "{{ .chezmoi.homeDir }}/.ssh/id_ed25519.pub"
 
 [core]
-	editor = zed --wait
+	editor = {{ .editor }}
 	commentchar = ";"
 	ignorecase = false
 	excludesfile = ~/.gitignore_global
