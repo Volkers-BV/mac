@@ -62,7 +62,7 @@ set_default com.apple.menuextra.clock IsAnalog bool false
 set_default com.apple.menuextra.clock DateFormat string "EEE MMM d h:mm a"
 
 # Language and locale
-defaults write NSGlobalDomain AppleLanguages -array "en" "nl"
+defaults write NSGlobalDomain AppleLanguages -array{{ range split "," .languages }} "{{ . }}"{{ end }}
 defaults write NSGlobalDomain AppleLocale -string "{{ .locale }}"
 
 # Disable "natural" scrolling (scroll direction: not inverted)
