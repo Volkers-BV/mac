@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# helpers/macos-defaults.sh hash: {{ include "helpers/macos-defaults.sh" | sha256sum }}
+
 # shellcheck source=helpers/macos-defaults.sh
 source "{{ .chezmoi.sourceDir }}/helpers/macos-defaults.sh"
 
