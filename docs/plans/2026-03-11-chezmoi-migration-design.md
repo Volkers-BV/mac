@@ -26,8 +26,16 @@ Major overhaul of the mac-setup dotfiles repository, migrating from custom shell
 | SSH keys | Generate fresh per machine | `run_once_` script generates, adds to macOS Keychain, copies pubkey to clipboard |
 | Other secrets | macOS Keychain retrieval | `security find-generic-password` at apply time, no secrets in repo |
 | CI tier | Moderate | Shellcheck, holistic template validation, Brewfile linting |
+| CI Brewfile lint | Fatal failures | `|| true` defeats the purpose of the lint job |
+| Template verification | Fixture data everywhere | Deterministic, non-interactive validation using `.github/test-chezmoi-data.toml` in all verification steps |
 | Chezmoi source dir | Repo root | Standard layout, non-managed files excluded via `.chezmoiignore` |
 | Package installation | `run_onchange_` with content hashing | Brewfile edits trigger re-apply via sha256sum in script comments |
+| Brewfile install order | Explicit ordered array | Reproducible; core before dev before apps; supports future inter-Brewfile dependencies |
+| GitHub username | `fridzema` hardcoded | Single-user repo, no reason for placeholders |
+| NVM sourcing | `$HOMEBREW_PREFIX`-based | Architecture-agnostic via `brew shellenv` export; works on both Apple Silicon and Intel |
+| Sudo keepalive | Plain `sudo -v`, no background loop | System defaults script finishes in seconds; 5-minute macOS ticket is sufficient |
+| Manual app inventory | Documented, grouped by source | Signals the list needs maintenance as apps change |
+| .gitignore | `.DS_Store` + editor debris | Prevents common local artifacts from polluting the repo |
 | Apple Container build | Opt-in / manual | Not baseline machine config; gated by template variable or separate script |
 
 ## Repository Structure
@@ -101,9 +109,10 @@ Current `config/.gitconfig` content with:
 
 ### dot_zshrc.tmpl
 
-- Homebrew shellenv: detect brew location via `command -v brew` or check both `/opt/homebrew/bin/brew` and `/usr/local/bin/brew`
-- NVM, Bun, Composer, Yarn PATH exports carried over
-- NVM sources bash_completion
+- Homebrew shellenv: detect brew location by checking both `/opt/homebrew/bin/brew` and `/usr/local/bin/brew`
+- NVM sourcing uses `$HOMEBREW_PREFIX/opt/nvm/...` — architecture-agnostic because `brew shellenv` exports `HOMEBREW_PREFIX` (`/opt/homebrew` on Apple Silicon, `/usr/local` on Intel)
+- Bun, Composer, Yarn PATH exports carried over
+- NVM sources bash_completion via `$HOMEBREW_PREFIX`
 
 ### private_dot_ssh/config.tmpl
 
@@ -124,7 +133,7 @@ Minimal scope — only installs what's needed to get chezmoi running:
 1. **Xcode CLI Tools** — install if missing, poll `xcode-select -p` in a loop until ready (defensive wait logic, not just polling)
 2. **Homebrew** — install if missing, handle both Apple Silicon (`/opt/homebrew`) and Intel (`/usr/local`) paths
 3. **chezmoi** — `brew install chezmoi` if missing, verify available before continuing
-4. **Handoff** — `chezmoi init --apply yourusername`
+4. **Handoff** — `chezmoi init --apply fridzema`
 
 Uses `#!/usr/bin/env bash` and `set -euo pipefail`. Fully idempotent — safe to re-run.
 
@@ -151,6 +160,7 @@ Uses `#!/usr/bin/env bash` and `set -euo pipefail`. Fully idempotent — safe to
   # Brewfile.core hash: {{ include "brewfiles/Brewfile.core" | sha256sum }}
   # Brewfile.dev hash:  {{ include "brewfiles/Brewfile.dev" | sha256sum }}
   ```
+- Installs Brewfiles in explicit deterministic order: core, dev, apps, office, quicklook (not a glob)
 - Runs `brew bundle --file=<file> --no-lock` for each Brewfile
 - Any Brewfile edit changes the hash, triggering re-run
 
@@ -164,6 +174,7 @@ Uses `#!/usr/bin/env bash` and `set -euo pipefail`. Fully idempotent — safe to
 
 **99-summary.sh.tmpl**
 - Non-blocking verification: checks `/Applications/AppName.app` for manual installs
+- App list is a maintained inventory grouped by source (Setapp apps, external downloads), with a comment signaling it needs updating when apps change
 - Reports installed brew formula/cask counts
 - Lists any missing manual-install apps (FortiClient, Setapp apps)
 - Reminds about `mackup restore`, GitHub SSH key upload, restart
@@ -171,7 +182,7 @@ Uses `#!/usr/bin/env bash` and `set -euo pipefail`. Fully idempotent — safe to
 ### Shared Helper (helpers/macos-defaults.sh)
 
 - `set_default domain key type value` — wrapper around `defaults write` with error handling
-- `require_sudo` — prompt once, maintain with background refresh loop
+- `require_sudo` — plain `sudo -v`, no background loop (system defaults script finishes in seconds)
 - `restart_app name` — `killall` with graceful fallback
 - Sourced from `{{ .chezmoi.sourceDir }}/helpers/macos-defaults.sh`
 
@@ -198,6 +209,7 @@ Runs on push to main + PRs, on `macos-14`:
 
 ### brewfile-lint
 - Run `brew bundle check --file=<file> --verbose` for each file in `brewfiles/`
+- Failures are fatal (no `|| true`) — CI must fail when a Brewfile has issues
 
 ### Test data (.github/test-chezmoi-data.toml)
 
