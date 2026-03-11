@@ -1,3 +1,2 @@
 # QuickLook plugins
 cask "qlmarkdown"
-cask "quicklook-json"
