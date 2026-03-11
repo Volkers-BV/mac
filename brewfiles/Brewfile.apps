@@ -1,15 +1,19 @@
-# GUI applications
+# === Company standard ===
+cask "google-chrome"
+cask "slack"
+
+# === Development tools ===
 cask "warp"
 cask "arc"
-cask "google-chrome"
 cask "zed"
-cask "setapp"
 cask "github"
-cask "spotify"
 cask "herd"
-cask "upscayl"
-cask "slack"
-cask "betterdisplay"
-cask "imageoptim"
 cask "ray"
 cask "tinkerwell"
+cask "imageoptim"
+
+# === Personal (uncomment or add your own) ===
+# cask "spotify"
+# cask "setapp"
+# cask "upscayl"
+# cask "betterdisplay"
