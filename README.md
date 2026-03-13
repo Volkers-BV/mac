@@ -200,8 +200,9 @@ Mackup is installed via Homebrew but completely optional.
 ├── .chezmoiscripts/
 │   ├── run_onchange_00-preflight.sh.tmpl
 │   ├── run_once_01-generate-ssh-key.sh.tmpl
-│   ├── run_once_02-configure-nvm.sh
+│   ├── run_once_02-configure-fnvm.sh             # Create ~/.nvm and clone fnvm to ~/.fnvm
 │   ├── run_onchange_10-install-packages.sh.tmpl
+│   ├── run_onchange_11-install-node.sh           # Install latest LTS + latest Node via nvm; create ~/.nvmrc.default
 │   ├── run_onchange_20-macos-system.sh.tmpl
 │   ├── run_onchange_21-macos-dock.sh.tmpl
 │   ├── run_onchange_22-macos-finder.sh.tmpl
@@ -237,8 +238,9 @@ bin/setup.sh
        ├─ Prompt for name, email, hostname, locale, editor, languages
        ├─ run_onchange_00 → Preflight: cache sudo, check Full Disk Access
        ├─ run_once_01  → Generate Ed25519 SSH key, add to Keychain, copy pub to clipboard
-       ├─ run_once_02  → Create ~/.nvm directory
+       ├─ run_once_02  → Create ~/.nvm directory; clone fnvm to ~/.fnvm
        ├─ run_onchange_10 → brew update && brew bundle (core → dev → apps → office → quicklook)
+       ├─ run_onchange_11 → Install latest LTS + latest Node.js; set default; create ~/.nvmrc.default
        ├─ run_onchange_20-25 → Apply macOS defaults (system, dock, finder, input, safari, apps)
        ├─ Deploy templates → ~/.gitconfig, ~/.zshrc, ~/.ssh/config, ~/.gitignore_global
        └─ run_after_99 → Print summary (installed count, missing apps, next steps)
