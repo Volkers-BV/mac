@@ -4,3 +4,6 @@ tap "oven-sh/bun"
 brew "oven-sh/bun/bun"
 brew "nvm"
 brew "yarn"
+brew "php"                  # PHP runtime (complements Herd for CLI usage)
+brew "python"               # Python 3 runtime
+brew "shellcheck"           # Shell script linter

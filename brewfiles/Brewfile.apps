@@ -12,8 +12,20 @@ cask "ray"
 cask "tinkerwell"
 cask "imageoptim"
 
-# === Personal (uncomment or add your own) ===
+# === Productivity (uncomment what you use) ===
+# cask "raycast"              # Spotlight replacement — clipboard history, snippets, window management
+# cask "1password"            # Password manager
+# cask "notion"               # Notes, docs, project management
+# cask "obsidian"             # Markdown-based knowledge base
+
+# === Communication (uncomment what you use) ===
+# cask "zoom"                 # Video conferencing
+# cask "discord"              # Chat and communities
+# cask "microsoft-teams"      # Microsoft Teams
+
+# === Media & personal (uncomment or add your own) ===
 # cask "spotify"
 # cask "setapp"
 # cask "upscayl"
 # cask "betterdisplay"
+# cask "iina"                 # Modern media player (replaces VLC/QuickTime)

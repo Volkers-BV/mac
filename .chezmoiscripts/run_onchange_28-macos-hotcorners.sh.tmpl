@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "{{ .chezmoi.sourceDir }}/helpers/macos-defaults.sh"
+
+echo "==> Applying Mission Control and hot corner defaults..."
+
+close_system_settings
+
+# --- Hot Corners ---
+# Possible values:
+#  0: no-op
+#  2: Mission Control
+#  3: Show application windows
+#  4: Desktop
+#  5: Start screen saver
+#  6: Disable screen saver
+# 10: Put display to sleep
+# 11: Launchpad
+# 12: Notification Center
+# 13: Lock Screen
+# 14: Quick Note
+
+# Top left → Mission Control
+set_default com.apple.dock wvous-tl-corner int 2
+set_default com.apple.dock wvous-tl-modifier int 0
+
+# Top right → Notification Center
+set_default com.apple.dock wvous-tr-corner int 12
+set_default com.apple.dock wvous-tr-modifier int 0
+
+# Bottom left → Lock Screen
+set_default com.apple.dock wvous-bl-corner int 13
+set_default com.apple.dock wvous-bl-modifier int 0
+
+# Bottom right → Quick Note
+set_default com.apple.dock wvous-br-corner int 14
+set_default com.apple.dock wvous-br-modifier int 0
+
+# --- Mission Control ---
+
+# Group windows by application in Mission Control
+set_default com.apple.dock expose-group-apps bool true
+
+restart_app "Dock"
+
+echo "==> Mission Control and hot corner defaults applied."
