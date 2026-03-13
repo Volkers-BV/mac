@@ -1,2 +1,5 @@
-# QuickLook plugins
-cask "qlmarkdown"
+# QuickLook plugins — press Space on any file in Finder for a preview
+cask "qlmarkdown"           # Markdown files
+cask "syntax-highlight"     # Source code with syntax highlighting
+cask "qlstephen"            # Plain text files without an extension
+cask "quicklook-json"       # JSON files (formatted and highlighted)

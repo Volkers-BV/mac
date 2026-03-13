@@ -3,3 +3,25 @@ brew "git"
 brew "gh"
 brew "mas"
 brew "mackup"
+
+# Modern CLI replacements
+brew "bat"                  # Better cat — syntax highlighting
+brew "eza"                  # Better ls — colors, git status, tree view
+brew "fd"                   # Better find — simple, fast, user-friendly
+brew "ripgrep"              # Better grep — blazingly fast recursive search
+brew "fzf"                  # Fuzzy finder — interactive filtering for any list
+brew "jq"                   # JSON processor — parse and transform JSON
+brew "tree"                 # Directory listing — visualize folder structure
+brew "htop"                 # Better top — interactive process viewer
+brew "tldr"                 # Simplified man pages — practical examples
+
+# GNU core utilities (prefixed with 'g' by default)
+brew "coreutils"            # GNU core utilities (gls, gcp, gmv, etc.)
+
+# Networking and transfer
+brew "curl"                 # HTTP client (Homebrew version, more up-to-date than macOS built-in)
+brew "wget"                 # File downloader
+brew "httpie"               # User-friendly HTTP client (http/https commands)
+
+# Compression
+brew "p7zip"                # 7-Zip file archiver
