@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# helpers/macos-defaults.sh hash: {{ include "helpers/macos-defaults.sh" | sha256sum }}
+
+# shellcheck source=helpers/macos-defaults.sh
+source "{{ .chezmoi.sourceDir }}/helpers/macos-defaults.sh"
+
+echo "==> Applying third-party app defaults..."
+
+# =============================================================================
+# Microsoft 365 suite
+# =============================================================================
+
+# --- Office (suite-wide) ---
+
+# Disable diagnostic/telemetry data
+set_default com.microsoft.office DiagnosticDataTypePreference string "ZeroDiagnosticData"
+
+# Suppress "What's New" dialog after updates
+set_default com.microsoft.office ShowWhatsNewOnLaunch bool false
+
+# Skip the document stage (template picker) on launch
+set_default com.microsoft.office ShowDocStageOnLaunch bool false
+
+# --- Microsoft AutoUpdate ---
+
+# Enable automatic updates
+set_default com.microsoft.autoupdate2 HowToCheck string "AutomaticDownload"
+
+# Disable AutoUpdate telemetry
+set_default com.microsoft.autoupdate2 SendAllTelemetryEnabled bool false
+
+# --- Outlook ---
+
+# Calendar: start week on Monday (2 = Monday)
+set_default com.microsoft.Outlook CalendarFirstDayOfWeek int 2
+
+# Hide "On My Computer" folders in sidebar
+set_default com.microsoft.Outlook HideFoldersOnMyComputerRootInFolderList bool true
+
+# --- OneDrive ---
+
+# Open OneDrive at login
+set_default com.microsoft.OneDrive OpenAtLogin bool true
+
+# Enable Files On-Demand (cloud-only files to save disk space)
+set_default com.microsoft.OneDrive FilesOnDemandEnabled bool true
+
+# =============================================================================
+# Warp
+# =============================================================================
+
+# Disable telemetry
+set_default dev.warp.Warp-Stable WarpTelemetryEnabled bool false
+
+# =============================================================================
+# Arc
+# =============================================================================
+
+# Disable Arc auto-update telemetry
+set_default company.thebrowser.Browser ShouldSendSearchQueries bool false
+
+# =============================================================================
+# Setapp
+# =============================================================================
+
+# No well-documented defaults for Setapp — settings are managed through the app.
+
+echo "==> Third-party app defaults applied."
