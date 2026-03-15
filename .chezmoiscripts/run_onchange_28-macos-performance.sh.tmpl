@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# helpers/macos-defaults.sh hash: {{ include "helpers/macos-defaults.sh" | sha256sum }}
+
+# shellcheck source=helpers/macos-defaults.sh
+source "{{ .chezmoi.sourceDir }}/helpers/macos-defaults.sh"
+
+echo "==> Applying performance defaults..."
+
+close_system_settings
+
+# Disable window opening/closing animations
+set_global_default NSAutomaticWindowAnimationsEnabled bool false
+
+# Instant Quick Look panel
+defaults write -g QLPanelAnimationDuration -float 0
+
+# Faster Dock auto-hide (only applies when auto-hide is enabled)
+set_default com.apple.dock autohide-delay float 0
+set_default com.apple.dock autohide-time-modifier float 0.5
+
+# Don't automatically terminate inactive apps
+set_global_default NSDisableAutomaticTermination bool true
+
+# Don't restore windows when re-opening apps
+set_global_default NSQuitAlwaysKeepsWindows bool false
+
+restart_app "Dock"
+
+echo "==> Performance defaults applied."
