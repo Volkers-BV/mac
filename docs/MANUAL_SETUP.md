@@ -502,7 +502,7 @@ sudo pmset -a tcpkeepalive 1
 defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
 
 # Instant Quick Look panel (no fade-in)
-defaults write -g QLPanelAnimationDuration -float 0
+defaults write NSGlobalDomain QLPanelAnimationDuration -float 0
 
 # Faster Dock auto-hide (no delay, quicker animation)
 defaults write com.apple.dock autohide-delay -float 0
