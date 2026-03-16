@@ -20,6 +20,9 @@ if [ -s "$FNVM_DIR/fnvm.sh" ]; then
   # shellcheck source=/dev/null
   source "$FNVM_DIR/fnvm.sh"
   fnvm_init
+  # fnvm only loads completions for bash; load them explicitly for zsh
+  # shellcheck source=/dev/null
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 else
   # Fallback to standard nvm if fnvm is not yet installed
   [ -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ] && \. "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"

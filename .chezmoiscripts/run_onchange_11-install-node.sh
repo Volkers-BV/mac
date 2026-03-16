@@ -33,6 +33,15 @@ if [ ! -L "$NVM_SH_LINK" ]; then
   echo "    ${NVM_SH_LINK} -> ${NVM_SH}"
 fi
 
+# Also symlink bash_completion so fnvm_init and zsh can find it at $NVM_DIR/bash_completion
+NVM_COMPLETION="${BREW_PREFIX}/opt/nvm/etc/bash_completion.d/nvm"
+NVM_COMPLETION_LINK="${NVM_DIR}/bash_completion"
+if [ -s "$NVM_COMPLETION" ] && [ ! -L "$NVM_COMPLETION_LINK" ]; then
+  echo "==> Creating bash_completion symlink for nvm completions..."
+  ln -sf "$NVM_COMPLETION" "$NVM_COMPLETION_LINK"
+  echo "    ${NVM_COMPLETION_LINK} -> ${NVM_COMPLETION}"
+fi
+
 echo "==> Installing latest LTS Node.js..."
 nvm install --lts
 
