@@ -51,7 +51,7 @@ alias localip="ipconfig getifaddr en0"
 
 # macOS utilities
 alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
-alias emptytrash="rm -rf ~/.Trash/*"
+alias emptytrash='command rm -rf ~/.Trash/* 2>/dev/null'
 alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
@@ -59,3 +59,6 @@ alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false &
 # SC2139: intentionally expand $SHELL at definition time (always points to current shell)
 # shellcheck disable=SC2139
 alias reload="exec $SHELL -l"
+
+# fzf shell integration (Ctrl+R history, Ctrl+T file finder)
+eval "$(fzf --zsh 2>/dev/null)"

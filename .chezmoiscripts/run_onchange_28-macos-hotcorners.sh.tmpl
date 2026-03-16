@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Include hash of helpers/macos-defaults.sh so changes trigger rerun
-# {{ include (joinPath .chezmoi.sourceDir "helpers/macos-defaults.sh") | sha256sum }}
-# shellcheck source=../helpers/macos-defaults.sh
+# helpers/macos-defaults.sh hash: {{ include "helpers/macos-defaults.sh" | sha256sum }}
+
+# shellcheck source=helpers/macos-defaults.sh
 source "{{ .chezmoi.sourceDir }}/helpers/macos-defaults.sh"
 
 echo "==> Applying Mission Control and hot corner defaults..."
