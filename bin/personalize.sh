@@ -50,8 +50,11 @@ echo "--- App selection (brewfiles/Brewfile.apps) ---"
 echo "Toggle apps on/off. Currently enabled apps are shown with [ON], disabled with [OFF]."
 echo ""
 
-# Read file into array, preserving comments and blank lines
-mapfile -t LINES < "$APPS_FILE"
+# Read file into array (bash 3.2 compatible — no mapfile)
+LINES=()
+while IFS= read -r line || [[ -n "$line" ]]; do
+  LINES+=("$line")
+done < "$APPS_FILE"
 MODIFIED_APPS=false
 
 for i in "${!LINES[@]}"; do
@@ -78,7 +81,6 @@ for i in "${!LINES[@]}"; do
       MODIFIED_APPS=true
     fi
   fi
-  # Skip pure comment lines (section headers) and blank lines
 done
 
 if [[ "$MODIFIED_APPS" == true ]]; then
