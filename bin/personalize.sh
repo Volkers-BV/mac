@@ -115,8 +115,8 @@ disable_brewfile_category() {
     if [[ "$ANSWER" =~ ^[Yy]$ ]]; then
       # Uncomment the BREWFILES array entry
       sed -i '' "s|^[[:space:]]*#[[:space:]]*\(.*${brewfile_name}.*\)|\1|" "$INSTALL_SCRIPT"
-      # Uncomment the hash line
-      sed -i '' "s|^# ${category}:.*|# ${category}:      {{ include \"brewfiles/${brewfile_name}\" | sha256sum }}|" "$INSTALL_SCRIPT"
+      # Restore the hash line (use @ delimiter to avoid conflict with | in template)
+      sed -i '' "s@^# ${category}:.*@# ${category}:      {{ include \"brewfiles/${brewfile_name}\" | sha256sum }}@" "$INSTALL_SCRIPT"
       CHANGES+=("Enabled Brewfile category: $display_name")
       echo "    Enabled."
     fi
@@ -127,7 +127,7 @@ disable_brewfile_category() {
       # Comment out the BREWFILES array entry
       sed -i '' "/${brewfile_name}/s|^[[:space:]]*\"\(.*\)\"|  # \"\1\"|" "$INSTALL_SCRIPT"
       # Comment out the hash line (replace with static comment so chezmoi doesn't error)
-      sed -i '' "s|^# ${category}:.*|# ${category}: (disabled)|" "$INSTALL_SCRIPT"
+      sed -i '' "s@^# ${category}:.*@# ${category}: (disabled)@" "$INSTALL_SCRIPT"
       CHANGES+=("Disabled Brewfile category: $display_name")
       echo "    Disabled."
     fi
