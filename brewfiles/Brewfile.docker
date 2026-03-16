@@ -1,4 +1,5 @@
 # Docker runtime (Colima) and CLI tools
+brew "qemu"                     # Required for Colima on Macs without Virtualization.framework
 brew "colima"
 brew "docker"
 brew "docker-compose"
