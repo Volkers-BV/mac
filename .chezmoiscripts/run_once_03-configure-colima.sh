@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-COLIMA_FLAGS="--cpu 4 --memory 8 --disk 60 --vm-type vz --vz-rosetta"
+COLIMA_FLAGS="--cpu 6 --memory 12 --disk 60 --vm-type vz --vz-rosetta --mount-type virtiofs"
 PLIST_PATH="$HOME/Library/LaunchAgents/com.colima.autostart.plist"
 COLIMA_BIN="$(brew --prefix)/bin/colima"
 
@@ -27,14 +27,16 @@ cat > "$PLIST_PATH" << EOF
     <string>${COLIMA_BIN}</string>
     <string>start</string>
     <string>--cpu</string>
-    <string>4</string>
+    <string>6</string>
     <string>--memory</string>
-    <string>8</string>
+    <string>12</string>
     <string>--disk</string>
     <string>60</string>
     <string>--vm-type</string>
     <string>vz</string>
     <string>--vz-rosetta</string>
+    <string>--mount-type</string>
+    <string>virtiofs</string>
   </array>
   <key>RunAtLoad</key>
   <true/>
