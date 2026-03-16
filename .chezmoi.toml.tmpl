@@ -4,6 +4,9 @@
 {{- $locale := promptStringOnce . "locale" "Locale" "en_US@currency=EUR" -}}
 {{- $editor := promptStringOnce . "editor" "Git editor command" "zed --wait" -}}
 {{- $languages := promptStringOnce . "languages" "Languages (comma-separated, e.g. en,nl)" "en" -}}
+{{- $colimaCpu := promptIntOnce . "colima_cpu" "Colima CPUs" 4 -}}
+{{- $colimaMem := promptIntOnce . "colima_mem" "Colima memory (GB)" 8 -}}
+{{- $colimaDisk := promptIntOnce . "colima_disk" "Colima disk (GB)" 60 -}}
 
 [data]
   name = {{ $name | quote }}
@@ -12,3 +15,6 @@
   locale = {{ $locale | quote }}
   editor = {{ $editor | quote }}
   languages = {{ $languages | quote }}
+  colima_cpu = {{ $colimaCpu }}
+  colima_mem = {{ $colimaMem }}
+  colima_disk = {{ $colimaDisk }}

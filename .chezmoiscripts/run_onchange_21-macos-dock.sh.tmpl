@@ -22,10 +22,6 @@ defaults write com.apple.dock persistent-apps -array
 # Don't show recent apps
 set_default com.apple.dock show-recents bool false
 
-# Disable Dashboard
-set_default com.apple.dashboard mcx-disabled bool true
-set_default com.apple.dock dashboard-in-overlay bool true
-
 # Don't auto-rearrange Spaces
 set_default com.apple.dock mru-spaces bool false
 
@@ -37,6 +33,10 @@ set_default com.apple.dock launchanim bool false
 
 # Highlight hover for stack grid view
 set_default com.apple.dock mouse-over-hilite-stack bool true
+
+# Faster Dock auto-hide (only applies when auto-hide is enabled)
+set_default com.apple.dock autohide-delay float 0
+set_default com.apple.dock autohide-time-modifier float 0.5
 
 restart_app "Dock"
 

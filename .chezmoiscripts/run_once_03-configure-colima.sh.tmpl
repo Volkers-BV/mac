@@ -1,15 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-COLIMA_FLAGS="--cpu 4 --memory 8 --disk 60 --vm-type vz --vz-rosetta"
+COLIMA_CPU={{ .colima_cpu }}
+COLIMA_MEM={{ .colima_mem }}
+COLIMA_DISK={{ .colima_disk }}
+COLIMA_FLAGS=(--cpu "$COLIMA_CPU" --memory "$COLIMA_MEM" --disk "$COLIMA_DISK" --vm-type vz --vz-rosetta)
 PLIST_PATH="$HOME/Library/LaunchAgents/com.colima.autostart.plist"
 COLIMA_BIN="$(brew --prefix)/bin/colima"
+
+if ! command -v colima &>/dev/null; then
+  echo "ERROR: colima is not installed. Run brew bundle first." >&2
+  exit 1
+fi
 
 echo "==> Starting Colima..."
 if colima status 2>/dev/null; then
   echo "    Colima is already running, skipping start."
 else
-  colima start $COLIMA_FLAGS
+  colima start "${COLIMA_FLAGS[@]}"
 fi
 
 echo "==> Installing Colima LaunchAgent..."
@@ -27,11 +35,11 @@ cat > "$PLIST_PATH" << EOF
     <string>${COLIMA_BIN}</string>
     <string>start</string>
     <string>--cpu</string>
-    <string>4</string>
+    <string>${COLIMA_CPU}</string>
     <string>--memory</string>
-    <string>8</string>
+    <string>${COLIMA_MEM}</string>
     <string>--disk</string>
-    <string>60</string>
+    <string>${COLIMA_DISK}</string>
     <string>--vm-type</string>
     <string>vz</string>
     <string>--vz-rosetta</string>

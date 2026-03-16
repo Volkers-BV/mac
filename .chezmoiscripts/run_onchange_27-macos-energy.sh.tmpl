@@ -8,8 +8,6 @@ source "{{ .chezmoi.sourceDir }}/helpers/macos-defaults.sh"
 
 echo "==> Applying energy defaults..."
 
-require_sudo
-
 # Battery: display sleep after 15 minutes
 sudo pmset -b displaysleep 15
 
