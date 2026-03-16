@@ -34,7 +34,7 @@ Before running, review and edit these files in your fork:
 | Setup script repo URL | `bin/setup.sh` | `GITHUB_REPO` variable at top |
 | Brew apps | `brewfiles/Brewfile.apps` | Sections: company, dev, personal |
 | App install checklist | `.chezmoiscripts/run_after_99-summary.sh.tmpl` | Uncomment apps you use |
-| macOS defaults | `.chezmoiscripts/run_onchange_20-25*` | Edit any preferences |
+| macOS defaults | `.chezmoiscripts/run_onchange_20-28*` | Edit any preferences |
 
 On first run, chezmoi will prompt you for: name, email, hostname, locale, editor, and languages.
 
@@ -183,6 +183,29 @@ Mackup is installed via Homebrew but completely optional.
 
 </details>
 
+<details>
+<summary>Energy (Apple Silicon power management)</summary>
+
+- Battery: display sleep after 15 minutes
+- AC power: display and system sleep disabled (never)
+- Low Power Mode on battery (efficiency cores only), full performance on AC
+- Power Nap disabled on battery, enabled on AC
+- Proximity wake disabled (no wake from nearby iPhone/Apple Watch)
+- TCP keepalive enabled during sleep (email, VPN, SSH stay connected)
+
+</details>
+
+<details>
+<summary>Performance (animations, app lifecycle)</summary>
+
+- Disables window opening/closing animations
+- Instant Quick Look panel (no fade-in delay)
+- Faster Dock auto-hide and reveal (no delay)
+- Prevents macOS from auto-terminating inactive apps
+- Disables window restore when re-opening apps
+
+</details>
+
 ---
 
 ## Project structure
@@ -209,6 +232,9 @@ Mackup is installed via Homebrew but completely optional.
 │   ├── run_onchange_23-macos-input.sh.tmpl
 │   ├── run_onchange_24-macos-safari.sh.tmpl
 │   ├── run_onchange_25-macos-apps.sh.tmpl
+│   ├── run_onchange_26-macos-screenshots.sh.tmpl
+│   ├── run_onchange_27-macos-energy.sh.tmpl
+│   ├── run_onchange_28-macos-performance.sh.tmpl
 │   └── run_after_99-summary.sh.tmpl
 ├── helpers/
 │   └── macos-defaults.sh                 # Shared library: set_default, require_sudo, restart_app
@@ -240,8 +266,7 @@ bin/setup.sh
        ├─ run_once_01  → Generate Ed25519 SSH key, add to Keychain, copy pub to clipboard
        ├─ run_once_02  → Create ~/.nvm directory; clone fnvm to ~/.fnvm
        ├─ run_onchange_10 → brew update && brew bundle (core → dev → apps → office → quicklook)
-       ├─ run_onchange_11 → Install latest LTS + latest Node.js; set default; create ~/.nvmrc.default
-       ├─ run_onchange_20-25 → Apply macOS defaults (system, dock, finder, input, safari, apps)
+       ├─ run_onchange_20-28 → Apply macOS defaults (system, dock, finder, input, safari, apps, screenshots, energy, performance)
        ├─ Deploy templates → ~/.gitconfig, ~/.zshrc, ~/.ssh/config, ~/.gitignore_global
        └─ run_after_99 → Print summary (installed count, missing apps, next steps)
 ```

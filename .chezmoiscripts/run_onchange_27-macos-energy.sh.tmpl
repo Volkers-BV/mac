@@ -19,4 +19,20 @@ sudo pmset -c displaysleep 0
 # Prevent sleep on power adapter
 sudo pmset -c sleep 0
 
+# --- Apple Silicon power management ---
+
+# Low Power Mode: enable on battery (efficiency cores only), disable on AC (full performance)
+sudo pmset -b lowpowermode 1
+sudo pmset -c lowpowermode 0
+
+# Power Nap: disable on battery (saves power), enable on AC (background updates)
+sudo pmset -b powernap 0
+sudo pmset -c powernap 1
+
+# Don't wake when iPhone or Apple Watch is nearby
+sudo pmset -a proximitywake 0
+
+# Keep TCP connections alive during sleep (email, VPN, SSH)
+sudo pmset -a tcpkeepalive 1
+
 echo "==> Energy defaults applied."
