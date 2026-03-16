@@ -108,13 +108,14 @@ disable_brewfile_category() {
   local display_name="$2"
   local brewfile_name="Brewfile.${category}"
 
-  # Check if already disabled (line is commented out in BREWFILES array)
-  if grep -q "^[[:space:]]*#.*${brewfile_name}" "$INSTALL_SCRIPT"; then
+  # Check if already disabled (BREWFILES array entry is commented out).
+  # Match on SOURCE_DIR to target only array entries, not the hash comment lines.
+  if grep -q "^[[:space:]]*#.*SOURCE_DIR.*${brewfile_name}" "$INSTALL_SCRIPT"; then
     printf "  [OFF] %-20s  Enable? (y/N): " "$display_name"
     read -r ANSWER
     if [[ "$ANSWER" =~ ^[Yy]$ ]]; then
-      # Uncomment the BREWFILES array entry
-      sed -i '' "s|^[[:space:]]*#[[:space:]]*\(.*${brewfile_name}.*\)|\1|" "$INSTALL_SCRIPT"
+      # Uncomment the BREWFILES array entry (only lines with SOURCE_DIR)
+      sed -i '' "/SOURCE_DIR.*${brewfile_name}/s|^[[:space:]]*#[[:space:]]*|  |" "$INSTALL_SCRIPT"
       # Restore the hash line (use @ delimiter to avoid conflict with | in template)
       sed -i '' "s@^# ${category}:.*@# ${category}:      {{ include \"brewfiles/${brewfile_name}\" | sha256sum }}@" "$INSTALL_SCRIPT"
       CHANGES+=("Enabled Brewfile category: $display_name")
@@ -124,8 +125,8 @@ disable_brewfile_category() {
     printf "  [ON]  %-20s  Disable? (y/N): " "$display_name"
     read -r ANSWER
     if [[ "$ANSWER" =~ ^[Yy]$ ]]; then
-      # Comment out the BREWFILES array entry
-      sed -i '' "/${brewfile_name}/s|^[[:space:]]*\"\(.*\)\"|  # \"\1\"|" "$INSTALL_SCRIPT"
+      # Comment out the BREWFILES array entry (only lines with SOURCE_DIR)
+      sed -i '' "/SOURCE_DIR.*${brewfile_name}/s|^[[:space:]]*|  # |" "$INSTALL_SCRIPT"
       # Comment out the hash line (replace with static comment so chezmoi doesn't error)
       sed -i '' "s@^# ${category}:.*@# ${category}: (disabled)@" "$INSTALL_SCRIPT"
       CHANGES+=("Disabled Brewfile category: $display_name")
