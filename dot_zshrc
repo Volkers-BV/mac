@@ -31,3 +31,45 @@ fi
 
 # Yarn global binaries
 export PATH="$HOME/.yarn/bin:$PATH"
+
+# --- Aliases ---
+
+# Modern CLI replacements (only if installed)
+command -v bat &>/dev/null && alias cat="bat --paging=never"
+command -v eza &>/dev/null && alias ls="eza"
+command -v eza &>/dev/null && alias ll="eza -la --git"
+command -v eza &>/dev/null && alias lt="eza --tree --level=2"
+
+# Navigation
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+
+# Safety nets
+alias cp="cp -i"
+alias mv="mv -i"
+alias rm="rm -i"
+
+# Git shortcuts
+alias gs="git status"
+alias gd="git diff"
+alias gl="git log --oneline -20"
+alias gp="git pull"
+
+# Networking
+alias ip="curl -s https://ifconfig.me"
+alias localip="ipconfig getifaddr en0"
+
+# macOS utilities
+alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+alias emptytrash='command rm -rf ~/.Trash/* 2>/dev/null'
+alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Reload shell
+# SC2139: intentionally expand $SHELL at definition time (always points to current shell)
+# shellcheck disable=SC2139
+alias reload="exec $SHELL -l"
+
+# fzf shell integration (Ctrl+R history, Ctrl+T file finder)
+eval "$(fzf --zsh 2>/dev/null)"

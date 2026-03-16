@@ -12,8 +12,8 @@ Fork this repo and make it yours.
 ## What's included
 
 - Homebrew packages (CLI tools, dev tools, GUI apps, office, QuickLook plugins)
-- Dotfiles: `.gitconfig`, `.zshrc`, `.ssh/config`, `.gitignore_global`
-- macOS system defaults (dark mode, Dock, Finder, keyboard, Safari, and more)
+- Dotfiles: `.gitconfig`, `.zshrc`, `.ssh/config`, `.gitignore_global`, `.editorconfig`, `.hushlogin`, `.mackup.cfg`
+- macOS system defaults (dark mode, Dock, Finder, keyboard, Safari, hot corners, and more)
 - Ed25519 SSH key generation with macOS Keychain integration
 - Optional app settings sync via Mackup + iCloud
 
@@ -184,6 +184,11 @@ Mackup is installed via Homebrew but completely optional.
 </details>
 
 <details>
+<summary>Screenshots (location, format, shadows)</summary>
+
+- Saves to `~/Documents/Screenshots`
+- PNG format
+- No window shadows in screenshots
 <summary>Energy (Apple Silicon power management)</summary>
 
 - Battery: display sleep after 15 minutes
@@ -196,6 +201,21 @@ Mackup is installed via Homebrew but completely optional.
 </details>
 
 <details>
+<summary>Energy (battery, power adapter)</summary>
+
+- Battery: display sleeps after 15 minutes
+- Power adapter: display never sleeps, system never sleeps
+
+</details>
+
+<details>
+<summary>Hot corners and Mission Control</summary>
+
+- Top left → Mission Control
+- Top right → Notification Center
+- Bottom left → Lock Screen
+- Bottom right → Quick Note
+- Groups windows by application in Mission Control
 <summary>Performance (animations, app lifecycle)</summary>
 
 - Disables window opening/closing animations
@@ -215,14 +235,17 @@ Mackup is installed via Homebrew but completely optional.
 ├── bin/
 │   └── setup.sh                          # Bootstrap: Xcode CLI Tools, Homebrew, chezmoi
 ├── brewfiles/
-│   ├── Brewfile.core                     # git, gh, mas, mackup
-│   ├── Brewfile.dev                      # composer, bun, nvm, yarn
-│   ├── Brewfile.apps                     # warp, arc, zed, slack, spotify, ...
+│   ├── Brewfile.core                     # git, gh, mas, mackup, bat, eza, fd, ripgrep, fzf, jq, ...
+│   ├── Brewfile.dev                      # composer, bun, nvm, yarn, php, python, shellcheck
+│   ├── Brewfile.docker                   # colima, docker, docker-compose
+│   ├── Brewfile.apps                     # warp, arc, zed, slack, spotify, raycast, ...
 │   ├── Brewfile.office                   # microsoft-office
-│   └── Brewfile.quicklook               # qlmarkdown, quicklook-json
+│   └── Brewfile.quicklook               # qlmarkdown, syntax-highlight, qlstephen, quicklook-json
 ├── .chezmoiscripts/
 │   ├── run_onchange_00-preflight.sh.tmpl
 │   ├── run_once_01-generate-ssh-key.sh.tmpl
+│   ├── run_once_02-configure-nvm.sh
+│   ├── run_once_03-configure-colima.sh
 │   ├── run_once_02-configure-fnvm.sh             # Create ~/.nvm and clone fnvm to ~/.fnvm
 │   ├── run_onchange_10-install-packages.sh.tmpl
 │   ├── run_onchange_11-install-node.sh           # Install latest LTS + latest Node via nvm; create ~/.nvmrc.default
@@ -234,14 +257,18 @@ Mackup is installed via Homebrew but completely optional.
 │   ├── run_onchange_25-macos-apps.sh.tmpl
 │   ├── run_onchange_26-macos-screenshots.sh.tmpl
 │   ├── run_onchange_27-macos-energy.sh.tmpl
+│   ├── run_onchange_28-macos-hotcorners.sh.tmpl
 │   ├── run_onchange_28-macos-performance.sh.tmpl
 │   └── run_after_99-summary.sh.tmpl
 ├── helpers/
 │   └── macos-defaults.sh                 # Shared library: set_default, require_sudo, restart_app
 ├── .chezmoi.toml.tmpl                    # Prompts for name, email, hostname, locale, editor, languages
 ├── dot_gitconfig.tmpl
-├── dot_zshrc
-├── dot_gitignore_global
+├── dot_zshrc                             # Shell config with aliases (bat, eza, git shortcuts, ...)
+├── dot_gitignore_global                  # Global gitignore (DS_Store, env files, logs, Terraform, ...)
+├── dot_editorconfig                      # Universal editor formatting (indent, charset, line endings)
+├── dot_hushlogin                         # Suppresses "Last login" banner in terminal
+├── dot_mackup.cfg                        # Mackup sync config (iCloud storage, app list)
 ├── private_dot_ssh/
 │   └── config.tmpl
 └── .github/
@@ -264,6 +291,11 @@ bin/setup.sh
        ├─ Prompt for name, email, hostname, locale, editor, languages
        ├─ run_onchange_00 → Preflight: cache sudo, check Full Disk Access
        ├─ run_once_01  → Generate Ed25519 SSH key, add to Keychain, copy pub to clipboard
+       ├─ run_once_02  → Create ~/.nvm directory
+       ├─ run_once_03  → Start Colima, install LaunchAgent for auto-start
+       ├─ run_onchange_10 → brew update && brew bundle (core → dev → docker → apps → office → quicklook)
+       ├─ run_onchange_20-28 → Apply macOS defaults (system, dock, finder, input, safari, apps, screenshots, energy, hot corners)
+       ├─ Deploy templates → ~/.gitconfig, ~/.zshrc, ~/.ssh/config, ~/.gitignore_global, ~/.editorconfig, ~/.hushlogin, ~/.mackup.cfg
        ├─ run_once_02  → Create ~/.nvm directory; clone fnvm to ~/.fnvm
        ├─ run_onchange_10 → brew update && brew bundle (core → dev → apps → office → quicklook)
        ├─ run_onchange_20-28 → Apply macOS defaults (system, dock, finder, input, safari, apps, screenshots, energy, performance)

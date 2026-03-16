@@ -4,3 +4,31 @@
 *.swp
 *.swo
 *~
+
+# OS generated
+Thumbs.db
+._*
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies (uncommon to commit, but guard globally)
+# node_modules/
+# vendor/
+
+# Build artifacts
+*.pyc
+__pycache__/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup

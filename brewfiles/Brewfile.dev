@@ -4,3 +4,5 @@ tap "oven-sh/bun"
 brew "oven-sh/bun/bun"
 brew "nvm"
 brew "yarn"
+brew "python"               # Python 3 runtime
+brew "shellcheck"           # Shell script linter
