@@ -189,6 +189,14 @@ Mackup is installed via Homebrew but completely optional.
 - Saves to `~/Documents/Screenshots`
 - PNG format
 - No window shadows in screenshots
+<summary>Energy (Apple Silicon power management)</summary>
+
+- Battery: display sleep after 15 minutes
+- AC power: display and system sleep disabled (never)
+- Low Power Mode on battery (efficiency cores only), full performance on AC
+- Power Nap disabled on battery, enabled on AC
+- Proximity wake disabled (no wake from nearby iPhone/Apple Watch)
+- TCP keepalive enabled during sleep (email, VPN, SSH stay connected)
 
 </details>
 
@@ -208,6 +216,13 @@ Mackup is installed via Homebrew but completely optional.
 - Bottom left → Lock Screen
 - Bottom right → Quick Note
 - Groups windows by application in Mission Control
+<summary>Performance (animations, app lifecycle)</summary>
+
+- Disables window opening/closing animations
+- Instant Quick Look panel (no fade-in delay)
+- Faster Dock auto-hide and reveal (no delay)
+- Prevents macOS from auto-terminating inactive apps
+- Disables window restore when re-opening apps
 
 </details>
 
@@ -231,7 +246,9 @@ Mackup is installed via Homebrew but completely optional.
 │   ├── run_once_01-generate-ssh-key.sh.tmpl
 │   ├── run_once_02-configure-nvm.sh
 │   ├── run_once_03-configure-colima.sh
+│   ├── run_once_02-configure-fnvm.sh             # Create ~/.nvm and clone fnvm to ~/.fnvm
 │   ├── run_onchange_10-install-packages.sh.tmpl
+│   ├── run_onchange_11-install-node.sh           # Install latest LTS + latest Node via nvm; create ~/.nvmrc.default
 │   ├── run_onchange_20-macos-system.sh.tmpl
 │   ├── run_onchange_21-macos-dock.sh.tmpl
 │   ├── run_onchange_22-macos-finder.sh.tmpl
@@ -241,6 +258,7 @@ Mackup is installed via Homebrew but completely optional.
 │   ├── run_onchange_26-macos-screenshots.sh.tmpl
 │   ├── run_onchange_27-macos-energy.sh.tmpl
 │   ├── run_onchange_28-macos-hotcorners.sh.tmpl
+│   ├── run_onchange_28-macos-performance.sh.tmpl
 │   └── run_after_99-summary.sh.tmpl
 ├── helpers/
 │   └── macos-defaults.sh                 # Shared library: set_default, require_sudo, restart_app
@@ -278,6 +296,10 @@ bin/setup.sh
        ├─ run_onchange_10 → brew update && brew bundle (core → dev → docker → apps → office → quicklook)
        ├─ run_onchange_20-28 → Apply macOS defaults (system, dock, finder, input, safari, apps, screenshots, energy, hot corners)
        ├─ Deploy templates → ~/.gitconfig, ~/.zshrc, ~/.ssh/config, ~/.gitignore_global, ~/.editorconfig, ~/.hushlogin, ~/.mackup.cfg
+       ├─ run_once_02  → Create ~/.nvm directory; clone fnvm to ~/.fnvm
+       ├─ run_onchange_10 → brew update && brew bundle (core → dev → apps → office → quicklook)
+       ├─ run_onchange_20-28 → Apply macOS defaults (system, dock, finder, input, safari, apps, screenshots, energy, performance)
+       ├─ Deploy templates → ~/.gitconfig, ~/.zshrc, ~/.ssh/config, ~/.gitignore_global
        └─ run_after_99 → Print summary (installed count, missing apps, next steps)
 ```
 

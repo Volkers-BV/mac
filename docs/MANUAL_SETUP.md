@@ -470,6 +470,54 @@ killall cfprefsd 2>/dev/null || true
 
 Some settings won't take effect until you restart.
 
+### Energy (Apple Silicon power management)
+
+```bash
+# Battery: display sleep after 15 minutes
+sudo pmset -b displaysleep 15
+
+# AC power: display sleep never, system sleep never
+sudo pmset -c displaysleep 0
+sudo pmset -c sleep 0
+
+# Low Power Mode: enable on battery (efficiency cores), disable on AC (full performance)
+sudo pmset -b lowpowermode 1
+sudo pmset -c lowpowermode 0
+
+# Power Nap: disable on battery (save power), enable on AC (background updates)
+sudo pmset -b powernap 0
+sudo pmset -c powernap 1
+
+# Don't wake when iPhone or Apple Watch is nearby
+sudo pmset -a proximitywake 0
+
+# Keep TCP connections alive during sleep (email, VPN, SSH)
+sudo pmset -a tcpkeepalive 1
+```
+
+### Performance
+
+```bash
+# Disable window opening/closing animations
+defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
+
+# Instant Quick Look panel (no fade-in)
+defaults write NSGlobalDomain QLPanelAnimationDuration -float 0
+
+# Faster Dock auto-hide (no delay, quicker animation)
+defaults write com.apple.dock autohide-delay -float 0
+defaults write com.apple.dock autohide-time-modifier -float 0.5
+
+# Don't automatically terminate inactive apps
+defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
+
+# Don't restore windows when re-opening apps
+defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows -bool false
+
+# Restart Dock to apply
+killall Dock
+```
+
 ---
 
 ## 7. Additional software
