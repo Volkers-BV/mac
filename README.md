@@ -25,20 +25,29 @@ Fork this repo and make it yours.
 
 Click **"Use this template"** or **Fork** on GitHub to create your own copy.
 
-### 2. Customize
+### 2. Personalize
 
-Before running, review and edit these files in your fork:
+```bash
+git clone https://github.com/<your-user>/mac.git
+cd mac
+./bin/personalize.sh
+```
+
+This walks you through repo-level customizations (GitHub URL, app selection, Brewfile categories).
+Commit the result to your fork before running setup.
+
+### 3. Customize (optional)
+
+For further tweaks beyond what the script covers, review these files:
 
 | What | File | Look for |
 |------|------|----------|
-| Setup script repo URL | `bin/setup.sh` | `GITHUB_REPO` variable at top |
-| Brew apps | `brewfiles/Brewfile.apps` | Sections: company, dev, personal |
 | App install checklist | `.chezmoiscripts/run_after_99-summary.sh.tmpl` | Uncomment apps you use |
 | macOS defaults | `.chezmoiscripts/run_onchange_20-28*` | Edit any preferences |
 
 On first run, chezmoi will prompt you for: name, email, hostname, locale, editor, and languages.
 
-### 3. Run on a fresh Mac
+### 4. Run on a fresh Mac
 
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/<your-user>/mac/main/bin/setup.sh)"
@@ -256,6 +265,7 @@ Mackup is installed via Homebrew but completely optional.
 ```
 .
 ├── bin/
+│   ├── personalize.sh                    # Interactive repo-level customization
 │   └── setup.sh                          # Bootstrap: Xcode CLI Tools, Homebrew, chezmoi
 ├── brewfiles/
 │   ├── Brewfile.core                     # git, gh, mas, mackup, bat, eza, fd, ripgrep, fzf, jq, ...

@@ -5,3 +5,6 @@
   locale = "en_US"
   editor = "zed --wait"
   languages = "en"
+  colima_cpu = 4
+  colima_mem = 8
+  colima_disk = 60

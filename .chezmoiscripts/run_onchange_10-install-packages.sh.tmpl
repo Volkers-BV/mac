@@ -25,9 +25,22 @@ BREWFILES=(
 )
 
 echo "==> Installing packages from Brewfiles..."
+FAILED_BREWFILES=()
 for brewfile in "${BREWFILES[@]}"; do
   echo "    Installing from $(basename "$brewfile")..."
-  brew bundle --file="$brewfile"
+  if ! brew bundle --file="$brewfile" --no-lock; then
+    echo "    WARNING: Failed to install some packages from $(basename "$brewfile")"
+    FAILED_BREWFILES+=("$brewfile")
+  fi
 done
+
+if [ ${#FAILED_BREWFILES[@]} -gt 0 ]; then
+  echo ""
+  echo "WARNING: The following Brewfiles had failures:"
+  for f in "${FAILED_BREWFILES[@]}"; do
+    echo "  - $(basename "$f")"
+  done
+  exit 1
+fi
 
 echo "==> Package installation complete."

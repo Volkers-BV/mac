@@ -19,9 +19,6 @@ sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.serve
 # Disable the sound effects on boot
 sudo nvram StartupMute=%01
 
-# Reveal IP, hostname, OS version when clicking clock in login window
-sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
-
 # Enable dark mode
 set_global_default AppleInterfaceStyle string "Dark"
 
@@ -65,14 +62,10 @@ set_default com.apple.menuextra.clock DateFormat string "EEE MMM d h:mm a"
 defaults write NSGlobalDomain AppleLanguages -array{{ range split "," .languages }} "{{ . }}"{{ end }}
 defaults write NSGlobalDomain AppleLocale -string "{{ .locale }}"
 
-# Disable "natural" scrolling (scroll direction: not inverted)
-set_global_default com.apple.swipescrolldirection bool false
-
 # Screen: require password immediately after sleep
 set_default com.apple.screensaver askForPassword int 1
 set_default com.apple.screensaver askForPasswordDelay int 0
 
-restart_app "SystemUIServer"
 restart_app "cfprefsd"
 
 echo "==> System defaults applied."
