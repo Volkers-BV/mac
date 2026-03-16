@@ -79,6 +79,29 @@ chezmoi apply
 
 Scripts prefixed with `run_onchange_` only re-run when their content changes.
 
+### Re-running everything from scratch
+
+On a Mac where you've already run the setup, `run_once_` scripts (SSH key, fnvm, Colima) are skipped. To force a full re-run:
+
+```bash
+chezmoi state delete-bucket --bucket=scriptState
+chezmoi apply
+```
+
+This clears chezmoi's record of which scripts have run, so all scripts execute again on the next apply.
+
+### Re-running from the curl oneliner
+
+If you've already run `chezmoi init` before, chezmoi caches the source repo locally and won't pick up remote changes. To force a clean re-run:
+
+```bash
+chezmoi state delete-bucket --bucket=scriptState
+chezmoi purge
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/<your-user>/mac/main/bin/setup.sh)"
+```
+
+`chezmoi purge` removes the cached source directory so `chezmoi init` re-clones from GitHub.
+
 ---
 
 ## App settings sync (optional)
@@ -240,12 +263,12 @@ Mackup is installed via Homebrew but completely optional.
 │   ├── Brewfile.docker                   # colima, docker, docker-compose
 │   ├── Brewfile.apps                     # warp, arc, zed, slack, spotify, raycast, ...
 │   ├── Brewfile.office                   # microsoft-office
-│   └── Brewfile.quicklook               # qlmarkdown, syntax-highlight, qlstephen, quicklook-json
+│   └── Brewfile.quicklook               # qlmarkdown, syntax-highlight, qlstephen
 ├── .chezmoiscripts/
 │   ├── run_onchange_00-preflight.sh.tmpl
 │   ├── run_once_01-generate-ssh-key.sh.tmpl
 │   ├── run_once_02-configure-nvm.sh
-│   ├── run_once_03-configure-colima.sh
+│   ├── run_once_12-configure-colima.sh
 │   ├── run_once_02-configure-fnvm.sh             # Create ~/.nvm and clone fnvm to ~/.fnvm
 │   ├── run_onchange_10-install-packages.sh.tmpl
 │   ├── run_onchange_11-install-node.sh           # Install latest LTS + latest Node via nvm; create ~/.nvmrc.default
@@ -292,14 +315,10 @@ bin/setup.sh
        ├─ run_onchange_00 → Preflight: cache sudo, check Full Disk Access
        ├─ run_once_01  → Generate Ed25519 SSH key, add to Keychain, copy pub to clipboard
        ├─ run_once_02  → Create ~/.nvm directory
-       ├─ run_once_03  → Start Colima, install LaunchAgent for auto-start
        ├─ run_onchange_10 → brew update && brew bundle (core → dev → docker → apps → office → quicklook)
-       ├─ run_onchange_20-28 → Apply macOS defaults (system, dock, finder, input, safari, apps, screenshots, energy, hot corners)
+       ├─ run_once_12  → Start Colima, install LaunchAgent for auto-start
+       ├─ run_onchange_20-28 → Apply macOS defaults (system, dock, finder, input, safari, apps, screenshots, energy, hot corners, performance)
        ├─ Deploy templates → ~/.gitconfig, ~/.zshrc, ~/.ssh/config, ~/.gitignore_global, ~/.editorconfig, ~/.hushlogin, ~/.mackup.cfg
-       ├─ run_once_02  → Create ~/.nvm directory; clone fnvm to ~/.fnvm
-       ├─ run_onchange_10 → brew update && brew bundle (core → dev → apps → office → quicklook)
-       ├─ run_onchange_20-28 → Apply macOS defaults (system, dock, finder, input, safari, apps, screenshots, energy, performance)
-       ├─ Deploy templates → ~/.gitconfig, ~/.zshrc, ~/.ssh/config, ~/.gitignore_global
        └─ run_after_99 → Print summary (installed count, missing apps, next steps)
 ```
 
